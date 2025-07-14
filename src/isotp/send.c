@@ -19,6 +19,11 @@ IsoTpSendHandle isotp_send_single_frame(IsoTpShims* shims, IsoTpMessage* message
         success: false,
         completed: true
     };
+    /* multi frame message length must greater than 7  */
+    if(message->size > 7) {
+        shims->log("Single frame payload exceeds maximum size (7 bytes)");
+        return handle;
+    }
 
     uint8_t can_data[CAN_MESSAGE_BYTE_SIZE] = {0};
     if(!set_nibble(PCI_NIBBLE_INDEX, PCI_SINGLE, can_data, sizeof(can_data))) {
